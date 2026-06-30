@@ -450,7 +450,7 @@ CLOSED: The same quality measure as the reference implementation must be used. T
 |        |Small LLM pretraining |Llama31_8b| Every 12288 sequences; `CEIL(12288 / global_batch_size) * global_batch_size` steps if 12288 is not divisible by GBS. |v6.0
 |        |LLM pretraining |Llama31_405B| Every 18432 sequences; `CEIL(18432 / global_batch_size) * global_batch_size` steps if 18432 is not divisible by GBS. Skipping first `FLOOR(0.0026*global_batch_size+12)` evaluations |v6.0
 |        |LLM finetuning |Llama2_70B_LoRA| Every 384 sequences; `CEIL(384 / global_batch_size) * global_batch_size` steps if 384 is not divisible by GBS. Skipping first `FLOOR(0.125*global_batch_size+2)` evaluations |v6.0
-|        |LLM MoE Pretraining |deepseekv3_671b| Every step. |v6.0
+|        |LLM MoE Pretraining |deepseekv3_671b| Every step. First evaluation must be at `GBS * FLOOR(42 + 24576 / GBS)` samples. |v6.0
 |Commerce|Recommendation |DLRMv2 (DCNv2)|Every FLOOR(TOTAL_TRAINING_SAMPLES / (GLOBAL_BATCH_SIZE * NUM_EVAL)) samples, where TOTAL_TRAINING_SAMPLES = 4195197692 and NUM_EVAL = 20 |v6.0
 |===
 For the quality measure used for deprecated benchmarks see <<Deprecated benchmarks quality measure>>
