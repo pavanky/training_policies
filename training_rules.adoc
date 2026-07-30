@@ -81,7 +81,7 @@ The benchmark suite consists of the benchmarks shown in the following table.
 |Language | Small LLM MoE pretraining |c4/en/3.0.1 |v6.1
 | |Small LLM pretraining |c4/en/3.0.1 |v6.1
 | |LLM finetuning |SCROLLS GovReport |v6.1
-| |LLM MoE Pretraining |c4/en/3.0.1 |v6.1
+| |LLM MoE pretraining |c4/en/3.0.1 |v6.1
 | |LLM post training |R2E-Gym-Subset (easy split) |v6.1
 |Commerce |Recommendation |Yambda |v6.1
 
@@ -144,9 +144,9 @@ The closed division models and quality targets are:
 
 |Vision |Text to image |FLUX.1 |0.586 Eval loss |v6.1
 |Language | Small LLM MoE pretraining | GPT_OSS_20B | 3.34 log perplexity |v6.1
-|  |Small LLM Pretraining |Llama31_8b |3.3 log perplexity |v6.1
+|  |Small LLM pretraining |Llama31_8b |3.3 log perplexity |v6.1
 | |LLM finetuning |Llama2_70B_LoRA |0.925 Eval loss |v6.1
-| |LLM MoE Pretraining |deepseekv3_671b |3.6 log perplexity |v6.1
+| |LLM MoE pretraining |deepseekv3_671b |3.6 log perplexity |v6.1
 | |LLM post training |Qwen3.5-397B-A17B |0.69 pass@4 |v6.1
 |Commerce |Recommendation |dlrm_v4_hstu |TBD |v6.1
 |===
@@ -359,6 +359,8 @@ The MLPerf verifier scripts checks all hyperparameters except those with names m
  |qwen35_397b_grpo |adamw |global_batch_size |must equal num_prompts_per_step * num_generations_per_prompt |global batch size in problems (prompts) per training step |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |num_prompts_per_step |unconstrained positive integer; must satisfy global_batch_size = num_prompts_per_step * num_generations_per_prompt |number of prompts (problems) sampled per training step |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |num_generations_per_prompt |16 |GRPO group size; number of independent trajectories generated per prompt |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
+ |qwen35_397b_grpo |adamw |loss_fn.truncated_importance_sampling_ratio |1.002 |upper bound for truncated importance sampling correction |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml#L69[reference code] |v6.1
+ |qwen35_397b_grpo |adamw |loss_fn.truncated_importance_sampling_ratio_min |0.999 |lower bound for truncated importance sampling correction |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml#L70[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_adamw_beta_1 |0.9 |AdamW beta1 |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_adamw_beta_2 |0.999 |AdamW beta2 |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_adamw_epsilon |1e-8 |AdamW epsilon |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
@@ -366,14 +368,12 @@ The MLPerf verifier scripts checks all hyperparameters except those with names m
  |qwen35_397b_grpo |adamw |opt_name |`adamw` |optimizer name; fixed |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_gradient_clip_norm |0.125 * sqrt(256 / global_batch_size) |gradients are clipped above this norm threshold |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_base_learning_rate |1.0e-6 * sqrt(global_batch_size / 256) |base learning rate |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
- |qwen35_397b_grpo |adamw |opt_end_learning_rate |equal to opt_base_learning_rate |learning rate is constant; end LR matches base LR |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_learning_rate_warmup_steps |0 |no linear warmup |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
- |qwen35_397b_grpo |adamw |opt_learning_rate_decay_steps |100000 |compliance-checker constant which is not exercised because the schedule is constant |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |opt_learning_rate_decay_schedule |constant |learning rate schedule; no decay |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |init_checkpoint_step |0 |first step after loading the pretrained Qwen3.5-397B-A17B checkpoint |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |max_steps |unconstrained |maximum number of training steps |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |max_sequence_length |65536 |maximum sequence length (context + response); also caps max response length |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
- |qwen35_397b_grpo |adamw |eval_samples |256 |number of held-out R2E-Gym validation tasks; fixed |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
+ |qwen35_397b_grpo |adamw |eval_samples |256 (TBD pending legal review) |number of held-out R2E-Gym validation tasks; fixed; pass@4 uses `num_val_generations_per_prompt = 4`, so the resulting number of validation rollouts is 1024 (`256 × 4`) |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |agent_max_turns |30 |maximum agent turns per rollout (reference config key `env.nemo_gym.swe_agents_*.responses_api_agents.swe_agents.agent_max_turns`); fixed |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |generation_training_rollout_temperature |1.0 |temperature used for training-time rollouts; fixed |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
  |qwen35_397b_grpo |adamw |generation_training_rollout_top_p |1.0 |top_p used for training-time rollouts; fixed |link:https://github.com/NVIDIA-NeMo/RL/blob/3fca04c9b313d313302923a5bb6b0c8dc0340ed6/qwen_35/configs/grpo_qwen35_397b_swe_openhands_async.yaml[reference code] |v6.1
@@ -416,7 +416,7 @@ If a new learning rate is needed for any GBS point, request new RCPs from the ta
 
 ==== qwen35_397b_grpo hyperparameter constraints
 
-Since GRPO post training of a 397B-parameter mixture-of-experts model is very expensive, the task force aims to limit hyperparameter searches. The base learning rate and gradient clipping norm are constrained by the global batch size (GBS), and the reference set of GBS points is fixed as follows.
+Since GRPO post training of a 397B-parameter mixture-of-experts model is very expensive, the task force aims to limit hyperparameter searches. Closed division submitters must use the reference GRPO loss function documented at link:https://docs.nvidia.com/nemo/rl/0.2.1/guides/grpo.html#loss[NeMo RL GRPO loss]. The base learning rate and gradient clipping norm are constrained by the global batch size (GBS), and the reference set of GBS points is fixed as follows.
 
 |===
  |global_batch_size |opt_base_learning_rate |opt_gradient_clip_norm |num_prompts_per_step |num_generations_per_prompt
@@ -463,7 +463,7 @@ CLOSED: The same quality measure as the reference implementation must be used. T
 |Language | Small LLM MoE pretraining | GPT_OSS_20B| Every 12288 sequences; `CEIL(12288 / global_batch_size) * global_batch_size` steps if 12288 is not divisible by GBS. |v6.1
 |        |Small LLM pretraining |Llama31_8b| Every 12288 sequences; `CEIL(12288 / global_batch_size) * global_batch_size` steps if 12288 is not divisible by GBS. |v6.1
 |        |LLM finetuning |Llama2_70B_LoRA| Every 384 sequences; `CEIL(384 / global_batch_size) * global_batch_size` steps if 384 is not divisible by GBS. Skipping first `FLOOR(0.125*global_batch_size+2)` evaluations |v6.1
-|        |LLM MoE Pretraining |deepseekv3_671b| First evaluation at `GBS * FLOOR(42 + 24576 / GBS)` samples; every step thereafter. |v6.1
+|        |LLM MoE pretraining |deepseekv3_671b| First evaluation at `GBS * FLOOR(42 + 24576 / GBS)` samples; every step thereafter. |v6.1
 |        |LLM post training |qwen35_397b_grpo| First evaluation at `global_batch_size * CEIL(2.5 + 3840 / global_batch_size)` samples; every training step (i.e., every `global_batch_size` samples) thereafter. |v6.1
 |Commerce|Recommendation |dlrm_v4_hstu|TBD |v6.1
 |===
@@ -513,8 +513,8 @@ Each benchmark result is based on a set of run results. The number of results fo
 |Vision|Text to Image |10 |v6.1
 |Language | Small LLM MoE pretraining | 10 | v6.1
 | |Small LLM pretraining |10 |v6.1
-| |LLM MoE Pretraining |3 |v6.1
-| |LLM Finetuning|10 |v6.1
+| |LLM MoE pretraining |3 |v6.1
+| |LLM finetuning |10 |v6.1
 | |LLM post training |3 |v6.1
 |Commerce |Recommendation |TBD |v6.1
 |===
