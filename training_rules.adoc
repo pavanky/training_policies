@@ -515,7 +515,7 @@ Each benchmark result is based on a set of run results. The number of results fo
 | |Small LLM pretraining |10 |v6.1
 | |LLM MoE pretraining |3 |v6.1
 | |LLM finetuning |10 |v6.1
-| |LLM post training |3 |v6.1
+| |LLM post training |3* |v6.1
 |Commerce |Recommendation |TBD |v6.1
 |===
 For the minimum number of runs that were required for deprecated benchmarks see <<Deprecated benchmarks results>>
@@ -524,6 +524,8 @@ Each benchmark result is computed by dropping the fastest and slowest runs, then
 
 
 Each benchmark result should be normalized by dividing the reference result for the corresponding reference implementation by the benchmark result. This normalization produces higher numbers for better results, which better aligns with human intuition.
+
+*LLM post training benchmark sees very high evaluation variance because eval is non-deterministic and GRPO training is very sensitive to changes. To mitigate the impact of this on the benchmark and keep submission costs in check, the LLM post training benchmark does late eval to hide variance and keep minimum number of submission runs low.
 
 === Scoring
 
